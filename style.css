@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+    --bgColor: #90B1CC;
+    --textPrimary: #202B2A;
+    --textSecondary: #fff;
+}
+
+body {
+    font-family: "Ubuntu", sans-serif;
+    background-color: var(--bgColor);
+    color: var(--textPrimary);
+    font-size: 1.1rem;
+}
+
+main {
+    width: 800px;
+    margin: 50px auto;
+}
+
+#head {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+#head img {
+    width: 55px;
+}
+
+#head h1 {
+    margin-top: 12px;
+}
+
+#header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+/* check later on */
+
+#button {
+    text-align: right;
+}
+
+button {
+    background: rgba(255,255,255,0.2);
+    border: 0;
+    padding: 5px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 22px;
+}
+
+#words{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.word {
+    display: inline-block;
+    margin: 2px;
+}
+
+#game {
+    line-height: 30px;
+    height: 105px;
+    overflow: hidden;
+    position: relative;
+}
+
+#game:focus {
+    outline: 0;
+}
+
+#words {
+    filter: blur(4px);
+}
+
+#game:focus #words {
+    filter: blur(0);
+}
+
+#focus {
+    position: absolute;
+    inset: 0;
+    text-align: center;
+    margin-top: 35px
+}
+
+#game:focus #focus {
+    display: none;
+}
+
+.letter.correct {
+    color: #fff;
+}
+
+.letter.incorrect {
+    color: #f55;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#cursor {
+    display: none;
+    width: 1.8px;
+    height: 1.4rem;
+    background: var(--textPrimary);
+    position: fixed;
+    top: 182px;
+    left: 368px;
+    animation: blink 0.7s infinite;
+}
+
+#game:focus #cursor {
+    display: block;
+}
