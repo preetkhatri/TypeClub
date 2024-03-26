@@ -73,6 +73,8 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
     console.log({key, expected});
     const isLetter = key.length===1 && key!==' ';
     const isSpace = key===' ';
+    const isBackspace = key==="Backspace";
+    const isFirstLetter = currentLetter===currentWord.firstChild;
 
     if(isLetter) {
         if(currentLetter) {
@@ -88,7 +90,7 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
             const appendWords = document.createElement('span');
             appendWords.innerHTML = key;
             appendWords.className = 'letter incorrect extra';
-            currentWord.appendChild(appendWords);
+            // currentWord.appendChild(appendWords);
         }
     }
 
@@ -104,6 +106,34 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
 
         if(currentLetter) removeClass(currentLetter,'current')
         addClass(currentWord.nextSibling.firstChild,'current')
+    }
+
+    if(isBackspace) {
+        if(currentLetter && isFirstLetter) {
+            removeClass(currentWord,'current');
+            addClass(currentWord.previousSibling,'current');
+            removeClass(currentLetter,'current');
+            addClass(currentWord.previousSibling.lastChild,'current');
+            removeClass(currentWord.previousSibling.lastChild,'incorrect');
+            removeClass(currentWord.previousSibling.lastChild,'correct');
+        }
+        if(currentLetter && !isFirstLetter) {
+            removeClass(currentLetter,'current');
+            addClass(currentLetter.previousSibling,'current');
+            removeClass(currentLetter.previousSibling, 'correct');
+            removeClass(currentLetter.previousSibling, 'incorrect');
+        }
+        if(!currentLetter) {
+            addClass(currentWord.lastChild,'current');
+            removeClass(currentWord.lastChild,'correct');
+            removeClass(currentWord.lastChild,'incorrect');
+        }
+    }
+
+    if(currentWord.getBoundingClientRect().top>220) {
+        const words = document.getElementById('words');
+        const margin = parseInt(words.style.marginTop || '0px');
+        words.style.marginTop = (margin - 35) + 'px';
     }
 
 })
