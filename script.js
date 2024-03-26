@@ -1,3 +1,5 @@
+// vocabulary
+
 let words = [
     "have", "is", "our", "of", "what", "all", "by", "say", "her", "well",
     "out", "us", "friend", "the", "any", "new", "those", "want", "see", "much",
@@ -39,11 +41,14 @@ const typeTime = 30000;
 window.timer = null;
 window.start = null;
 
+// Generating Random words
 
 function randomWord() {
     const idx = Math.floor(Math.random() * len);
     return words[idx];
 }
+
+// Addition & removal of class
 
 function addClass(e,name) {
     e.className += ' '+name;
@@ -53,9 +58,13 @@ function removeClass(e,name) {
     e.className = e.className.replace(name,'');
 }
 
+// converting letters into a span format
+
 function format(word) {
     return `<div class="word"><span class="letter">${word.split('').join('</span><span class="letter">')}</span></div>`
 }
+
+// new test begin
 
 function newGame() {
     document.getElementById('words').innerHTML = '';
@@ -68,7 +77,9 @@ function newGame() {
     window.timer = null;
 }
 
-document.getElementById('game').addEventListener('keyup',(e)=> {
+// listening key press
+
+document.getElementById('game').addEventListener('keydown',(e)=> {
     const key = e.key;
     const currentWord = document.querySelector('.word.current');
     const currentLetter = document.querySelector('.letter.current');
@@ -80,11 +91,17 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
     const isBackspace = key==="Backspace";
     const isFirstLetter = currentLetter===currentWord.firstChild;
 
+    if(e.keyCode === 9) {
+        location.reload();
+    }
+
+    // checking if time is up then it returns
+
     if(document.querySelector('#game.over')) {
         return;
     }
 
-    console.log({key, expected});
+    // for timing record
 
     if(!window.timer) {
         window.timer = setInterval(() => {
@@ -104,8 +121,11 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
         }, 1000);
     }
 
+    // checking if we are on a letter
+
     if(isLetter) {
         if(currentLetter) {
+            // depending upon the typed keyword (correct or not), a class is assigned
             let classType;
             if(key===expected) classType='correct';
             else classType='incorrect';
@@ -122,8 +142,11 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
         }
     }
 
+    // handling space type
+
     if(isSpace) {
         if(expected!==' ') {
+            // if typed space instead of an expected word
             const letterSkip = [...document.querySelectorAll('.word.current .letter:not(.correct)')]
             letterSkip.forEach((e)=>{
                 addClass(e,'incorrect');
@@ -136,7 +159,10 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
         addClass(currentWord.nextSibling.firstChild,'current')
     }
 
+    // handling backspace
+
     if(isBackspace) {
+        // on the first letter of the word
         if(currentLetter && isFirstLetter) {
             removeClass(currentWord,'current');
             addClass(currentWord.previousSibling,'current');
@@ -145,6 +171,7 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
             removeClass(currentWord.previousSibling.lastChild,'incorrect');
             removeClass(currentWord.previousSibling.lastChild,'correct');
         }
+        // not the first letter
         if(currentLetter && !isFirstLetter) {
             removeClass(currentLetter,'current');
             addClass(currentLetter.previousSibling,'current');
@@ -158,6 +185,7 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
         }
     }
 
+    // for scrolling down of the lines and showing bottom lines
     if(currentWord.getBoundingClientRect().top>220) {
         const words = document.getElementById('words');
         const margin = parseInt(words.style.marginTop || '0px');
@@ -165,6 +193,8 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
     }
 
 })
+
+// calculation of wpm
 
 function result() {
     const allWords = [...document.querySelectorAll('.word')];
@@ -175,14 +205,15 @@ function result() {
         const letters = [...e.children];
         const incorrectLetters = letters.filter(k=>k.className.includes('incorrect'))
         const correctLetters = letters.filter(k=>k.className.includes('correct'));
-        console.log("Word change ");
-        console.log(incorrectLetters.length);
-        console.log(correctLetters.length);
         return incorrectLetters.length===0 && correctLetters.length === letters.length;
     });
 
+    console.log(correctWords);
+
     return (correctWords.length/typeTime)*60000;
 }
+
+// when game is over then simply add the class & show the wpm 
 
 function gameOver() {
     clearInterval(window.timer);
