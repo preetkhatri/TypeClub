@@ -1,4 +1,4 @@
-const words = ["the", "be", "to", "of", "and", "a", "in", "that", "have", "I", "it", "for", "not", "on", "with", "he", "as", "you", "do", "at", "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", "or", "an", "will", "my", "one", "all", "would", "there", "their", "what", "so", "up", "out", "if", "about", "who", "get", "which", "go", "me", "when", "make", "can", "like", "time", "no", "just", "him", "know", "take", "people", "into", "year", "your", "good", "some", "could", "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over", "think", "also", "back", "after", "use", "two", "how", "our", "work", "first", "well", "way", "even", "new", "want", "because", "any", "these", "give", "day", "most", "us", "is", "are", "was", "were", "has", "were", "had", "been", "do", "does", "did", "done", "can", "could", "will", "would", "shall", "should", "ought", "might", "may", "must", "have", "has", "had", "having", "make", "made", "making", "let", "lets", "letting", "go", "went", "gone", "going", "come", "came", "coming", "run", "ran", "running", "take", "took", "taking", "give", "gave", "giving", "keep", "kept", "keeping", "see", "saw", "seen", "seeing", "seem", "seemed", "seeming", "feel", "felt", "feeling", "hear", "heard", "hearing", "say", "said", "saying", "tell", "told", "telling", "read", "read", "reading", "think", "thought", "thinking", "find", "found", "finding", "ask", "asked", "asking", "work", "worked", "working", "seem", "seemed", "seeming", "try", "tried", "trying", "use", "used", "using", "call", "called", "calling", "be", "been", "being", "put", "put", "putting", "begin", "began", "beginning", "appear", "appeared", "appearing", "feel", "felt", "feeling", "bring", "brought", "bringing", "understand", "understood", "understanding", "mean", "meant", "meaning", "stand", "stood", "standing", "choose", "chose", "chosen", "choosing", "move", "moved", "moving", "live", "lived", "living", "believe", "believed", "believing", "receive", "received", "receiving", "experience", "experienced", "experiencing", "leave", "left", "leaving", "decide", "decided", "deciding", "hear", "heard", "hearing", "expect", "expected", "expecting", "offer", "offered", "offering", "allow", "allowed", "allowing", "train", "trained", "training", "learn", "learned", "learning", "stop", "stopped", "stopping", "change", "changed", "changing", "grow", "grew", "grown", "growing", "improve", "improved", "improving", "remember", "remembered", "remembering", "serve", "served", "serving", "build", "built", "building", "remain", "remained", "remaining", "reach", "reached", "reaching", "kill", "killed", "killing", "carry", "carried", "carrying", "occur", "occurred", "occurring", "drive", "drove", "driven", "driving", "walk", "walked", "walking", "explain", "explained", "explaining", "pay", "paid", "paying", "produce", "produced", "producing", "determine", "determined", "determining", "include", "included", "including", "study", "studied", "studying", "play", "played", "playing", "run", "ran", "running", "exist", "existed", "existing", "set", "set", "setting", "send", "sent", "sending", "watch", "watched", "watching", "choose", "chose", "chosen", "choosing", "think", "thought", "thinking", "belong", "belonged", "belonging", "appear", "appeared", "appearing", "write", "wrote", "writing", "understand", "understood", "understanding", "continue", "continued", "continuing", "grow", "grew", "grown", "growing", "lose", "lost", "losing", "allow", "allowed", "allowing", "require", "required", "requiring", "suggest", "suggested", "suggesting", "remain", "remained", "remaining", "raise", "raised", "raising", "improve", "improved", "improving", "contain", "contained", "containing", "join", "joined", "joining", "win", "won", "winning", "understand", "understood", "understanding", "show", "showed", "shown", "showing", "obtain", "obtained", "obtaining", "mean", "meant", "meaning", "consider", "considered", "considering", "appear", "appeared", "appearing", "suggest", "suggested", "suggesting", "refer", "referred", "referring", "start", "started", "starting", "develop", "developed", "developing", "permit", "permitted", "permitting", "hope", "hoped", "hoping", "require", "required", "requiring", "agree", "agreed", "agreeing", "identify", "identified", "identifying", "wonder", "wondered", "wondering", "expect", "expected", "expecting", "predict", "which", "are", "we", "his", "from", "or", "an", "this", "will", "one",
+let words = [
     "have", "is", "our", "of", "what", "all", "by", "say", "her", "well",
     "out", "us", "friend", "the", "any", "new", "those", "want", "see", "much",
     "men", "should", "up", "in", "world", "go", "about", "only", "thought", "people",
@@ -34,8 +34,11 @@ const words = ["the", "be", "to", "of", "and", "a", "in", "that", "have", "I", "
     "ethics", "integrity", "corporate", "social", "responsibility", "globalization", "sustainability",
     "economics", "microeconomics", "macroeconomics", "supply", "demand"];
 
-
 const len = words.length;
+const typeTime = 30000;
+window.timer = null;
+window.start = null;
+
 
 function randomWord() {
     const idx = Math.floor(Math.random() * len);
@@ -61,6 +64,8 @@ function newGame() {
     }
     addClass(document.querySelector('.word'), 'current');
     addClass(document.querySelector('.letter'), 'current');
+    document.getElementById("timer").innerHTML = typeTime/1000;
+    window.timer = null;
 }
 
 document.getElementById('game').addEventListener('keyup',(e)=> {
@@ -70,11 +75,34 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
     let expected = currentLetter;
     if(expected===null) expected=' ';
     else expected=currentLetter.innerHTML;
-    console.log({key, expected});
     const isLetter = key.length===1 && key!==' ';
     const isSpace = key===' ';
     const isBackspace = key==="Backspace";
     const isFirstLetter = currentLetter===currentWord.firstChild;
+
+    if(document.querySelector('#game.over')) {
+        return;
+    }
+
+    console.log({key, expected});
+
+    if(!window.timer) {
+        window.timer = setInterval(() => {
+            if(!window.start) {
+                window.start = (new Date()).getTime();
+            }
+            const currentTime = (new Date()).getTime();
+            const msPassed = currentTime - window.start;
+            const sPassed = Math.round(msPassed/1000);
+            const sLeft = (typeTime/1000)-sPassed;
+            if(sLeft<=0) {
+                // document.getElementById("timer").innerHTML = sLeft;
+                gameOver();
+                return;
+            }
+            document.getElementById("timer").innerHTML = sLeft;
+        }, 1000);
+    }
 
     if(isLetter) {
         if(currentLetter) {
@@ -136,6 +164,34 @@ document.getElementById('game').addEventListener('keyup',(e)=> {
         words.style.marginTop = (margin - 35) + 'px';
     }
 
+})
+
+function result() {
+    const allWords = [...document.querySelectorAll('.word')];
+    const lastTyped = document.querySelector('.word.current');
+    const lastTypedIdx = allWords.indexOf(lastTyped);
+    const typedWords = allWords.slice(0,lastTypedIdx);
+    const correctWords = typedWords.filter((e)=>{
+        const letters = [...e.children];
+        const incorrectLetters = letters.filter(k=>k.className.includes('incorrect'))
+        const correctLetters = letters.filter(k=>k.className.includes('correct'));
+        console.log("Word change ");
+        console.log(incorrectLetters.length);
+        console.log(correctLetters.length);
+        return incorrectLetters.length===0 && correctLetters.length === letters.length;
+    });
+
+    return (correctWords.length/typeTime)*60000;
+}
+
+function gameOver() {
+    clearInterval(window.timer);
+    addClass(document.getElementById('game'),'over');
+    document.getElementById("timer").innerHTML = `WPM: ${result()}`
+}
+
+document.getElementById("fight").addEventListener("click", ()=>{
+    location.reload();
 })
 
 newGame();

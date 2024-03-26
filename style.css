@@ -134,3 +134,12 @@ button {
 #game:focus #cursor {
     display: block;
 }
+
+#game.over #words {
+    filter: blur(0);
+    opacity: 0.7;
+}
+
+#game.over #focus {
+    display: none;
+}
