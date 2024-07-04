@@ -3,7 +3,7 @@ let words = [];
 // API call
 
 async function apiCall(wordLength) {
-    const apiUrl = `https://random-word-api.herokuapp.com/word?number=100&length=${wordLength}`;
+    const apiUrl = `https://random-word-api.herokuapp.com/word?number=500&length=${wordLength}`;
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
