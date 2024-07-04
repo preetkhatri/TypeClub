@@ -20,15 +20,32 @@
         </div>
         <div id="game" tabindex="0">
             <div id="words"></div>
-            <!-- <div id="cursor"></div> -->
+            <div id="cursor"></div>
             <div id="focus">Click to Type</div>
         </div>
         <div id="button">
             <button id="fight">New Fight</button>
         </div>
     </main>
+
+    <div class="overlay" id="overlay">
+        <div class="modal" id="modal">
+            <h2>Choose Word Length</h2>
+            <p>Select the preferred word length:</p>
+            <select id="wordLengthSelect">
+                <option value="3">3 Letters</option>
+                <option value="4">4 Letters</option>
+                <option value="5">5 Letters</option>
+                <option value="6">6 Letters</option>
+                <option value="7">7 Letters</option>
+                <option value="8">8 Letters</option>
+                <option value="9">9 Letters</option>
+            </select>
+            <button id="saveWordLengthBtn">Start Fighting</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 
-
-<script src="script.js"></script>
 </html>

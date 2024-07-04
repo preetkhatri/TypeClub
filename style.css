@@ -6,7 +6,6 @@
     box-sizing: border-box;
 }
 
-
 :root {
     --bgColor: #90B1CC;
     --textPrimary: #202B2A;
@@ -46,14 +45,12 @@ main {
     margin-bottom: 22px;
 }
 
-/* check later on */
-
 #button {
     text-align: right;
 }
 
 button {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     border: 0;
     padding: 5px 20px;
     border-radius: 3px;
@@ -61,7 +58,7 @@ button {
     margin-top: 22px;
 }
 
-#words{
+#words {
     font-size: 1.2rem;
     font-weight: 500;
 }
@@ -113,9 +110,11 @@ button {
     0% {
         opacity: 1;
     }
+
     50% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
@@ -126,10 +125,9 @@ button {
     width: 1.8px;
     height: 1.4rem;
     background: var(--textPrimary);
-    position: fixed;
-    top: 182px;
-    left: 368px;
-    animation: blink 0.7s infinite;
+    position: absolute;
+    /* animation: blink 1s infinite;
+    animation-timing-function: ease-in; */
 }
 
 #game:focus #cursor {
@@ -143,4 +141,64 @@ button {
 
 #game.over #focus {
     display: none;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.modal p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.modal select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.modal button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal button:hover {
+    background-color: #218838;
 }
