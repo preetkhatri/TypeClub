@@ -1,18 +1,109 @@
 let words = [];
 
-// API call
+const quotes = [
+    "The first rule of Fight Club is: you do not talk about Fight Club.",
+    "We are the middle children of history, raised by television, but yearning for a big war.",
+    "The things you own end up owning you.",
+    "You met me at a very strange time in my life.",
+    "You are not your job, you are not how much money you have in the bank. You are not the car you drive. You are not the contents of your wallet. You are not your fucking khakis.",
+    "When you have insomnia, you're never really asleep and you're never really awake.",
+    "We're consumers. We are by-products of a lifestyle obsession. Ultimate consumers.",
+    "It's only after we've lost everything that we're free to do anything.",
+    "Sticking feathers up your butt does not make you a chicken.",
+    "This is not a fight. This is self-improvement.",
+    "Without pain, without sacrifice, we would have nothing.",
+    "I say never be complete. I say stop always fucking striving to become.",
+    "The irony is that the only ones who are happy are the fucking idiots.",
+    "You are not special. We are all made of the same damn stuff. We are all sentenced to this life.",
+    "Fuck society.",
+    "First rule of Project Mayhem: I get to break the rules.",
+    "You break the rules, and you become the rule.",
+    "We're the all-singing, all-dancing crap of the world.",
+    "My soap is a fight club. My life is a fight club.",
+    "Our war is a spiritual war. It is a war of the soul against humanity.",
+    "Gentlemen, welcome to Fight Club. The following are the rules...",
+    "The condoms are there for safety, not for hygiene.",
+    "Self-improvement is masturbation. This is self-destruction.",
+    "Maybe we all have a little bit of insomnia in us.",
+    "I am Jack's complete lack of surprise.",
+    "You are fucking weak. And when you die, you're going to hell.",
+    "Isn't that the point? To laugh at the whole thing?",
+    "Humanity needs a plague.",
+    "The thing about insomnia... the world doesn't stop spinning just because you can't catch your breath.",
+    "Tyler always gets what he wants.",
+    "Leave the gun. Take the cannoli.",
+    "You're not weak. You just haven't found what you're strong at.",
+    "Hit me.",
+    "It is about a generation that has had everything yet feels like it has nothing.",
+    "The chemicals in your brain interact with the narrative you construct of your life.",
+    "Tyler and I are the same person.",
+    "You're not dying. You're waking up.",
+    "The chaos is the cure.",
+    "I haven't been to a support group in months. I don't need them anymore. I've got you.",
+    "You are not your illness.",
+    "Tears happen when your brain needs to relieve stress hormones.",
+    "On a long enough timeline, the survival rate for everyone drops to zero.",
+    "The underwear business is a multi-billion dollar a year industry. People buy underwear. They need more underwear. People need new underwear.",
+    "You're a consumer, a product. The delusion that you control your life...",
+    "Maybe that's the real fight - to be a single goddamn unit.",
+    "Tyler wasn't weak. He wasn't burdened by the past. He wasn't tethered to anything.",
+    "Where is my goddamn soap?",
+    "Maybe we all looked like freaks to them, too.",
+    "The horror of what you see in yourself... that's what tears are for.",
+    "You are not sleeping. You are waiting."
+];
 
+const getParagraph = () => {
+    const quotes_size = quotes.length;
+    let paragraph = "";
+    let indexes = [];
+    for (let i = 0; i < quotes_size; i++) indexes = [...indexes, i];
+    while (indexes.length != 0) {
+        const random_index = Math.floor(Math.random() * indexes.length);
+        paragraph += quotes[random_index] + " ";
+        indexes.splice(random_index, 1);
+    }
+    console.log("paragraph is");
+    return paragraph;
+}
+
+
+// API call
 async function apiCall(wordLength) {
-    const apiUrl = `https://random-word-api.herokuapp.com/word?number=500&length=${wordLength}`;
+    const apiUrl = `https://random-word-api.herokuapp.com/word?number=100&length=${wordLength}`;
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
             throw new Error("Network response was not OK!");
         }
         const data = await response.json();
-        words = [...words, ...data]; 
+        return data;
     } catch (error) {
         console.log("Error is", error);
+    }
+}
+
+// fetch words of diff length and combine them
+async function fetchAndCombine() {
+    try {
+        const [lengthThreeWords, lengthFourWords, lengthFiveWords, lengthSixWords] = await Promise.all([
+            apiCall(3),
+            apiCall(4),
+            apiCall(5),
+            apiCall(6)
+        ]);
+
+        words = [
+            ...words,
+            ...lengthThreeWords,
+            ...lengthFourWords,
+            ...lengthFiveWords,
+            ...lengthSixWords
+        ];
+
+        console.log(words);
+    } catch (error) {
+        console.log("Error fetching words:", error);
     }
 }
 
@@ -26,21 +117,6 @@ function randomWord() {
     const idx = Math.floor(Math.random() * words.length);
     return words[idx];
 }
-
-// Closing modal
-function closeModal() {
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('modal').style.display = 'none';
-}
-
-document.getElementById('saveWordLengthBtn').addEventListener('click', async function () {
-    var wordLength = document.getElementById('wordLengthSelect').value;
-    console.log('Selected word length:', wordLength);
-    closeModal();
-    await apiCall(wordLength);
-    console.log(words);
-    newGame();
-});
 
 // Addition & removal of class
 function addClass(e, name) {
@@ -57,7 +133,18 @@ function format(word) {
 }
 
 // New test begin
-function newGame() {
+async function newGame() {
+    const spinner = document.getElementById('loading-spinner');
+    const game = document.getElementById('game');
+
+    spinner.style.display = 'block';
+    game.style.display = 'none';
+
+    await fetchAndCombine();
+
+    spinner.style.display = 'none';
+    game.style.display = 'block';
+
     console.log("new game words are", words);
     document.getElementById('words').innerHTML = '';
     for (let i = 0; i < 100; i++) {
@@ -68,6 +155,7 @@ function newGame() {
     document.getElementById("timer").innerHTML = typeTime / 1000;
     window.timer = null;
 }
+
 
 // Function to update the cursor's position
 function updateCursor() {
@@ -208,3 +296,5 @@ function gameOver() {
 document.getElementById("fight").addEventListener("click", () => {
     location.reload();
 });
+
+newGame();
