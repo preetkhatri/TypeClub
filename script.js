@@ -1,3 +1,13 @@
+let userName = '';
+
+function initialze() {
+    while (!userName) {
+        userName = window.prompt("enter username:");
+        if (!userName) window.alert("username is required");
+        else newGame();
+    }
+}
+
 let words = [];
 
 const quotes = [
@@ -285,16 +295,38 @@ function result() {
     return (correctWords.length / (typeTime / 60000));
 }
 
-// When game is over then simply add the class & show the wpm 
-function gameOver() {
+// When game is over then simply remove the (hidden) class & show the wpm 
+async function gameOver() {
     isGameOver = true;
     clearInterval(window.timer);
     addClass(document.getElementById('game'), 'over');
-    document.getElementById("timer").innerHTML = `WPM: ${result()}`;
+    const wpm = result();
+    document.getElementById("timer").innerHTML = `WPM: ${wpm}`;
+
+    try {
+        await axios.post('https://typeclub-backend.onrender.com/submit-score', {
+            name: userName,
+            score: wpm
+        })
+
+        const response = await axios.get('https://typeclub-backend.onrender.com/leaderboard');
+        const leaderboard = response.data;
+
+        document.getElementById('leaderboard-list').innerHTML = '';
+        leaderboard.forEach((child) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${child.name}: ${child.score} WPM`;
+            document.getElementById('leaderboard-list').appendChild(listItem);
+        })
+
+        document.getElementById('leaderboard').classList.remove('hidden');
+    } catch (error) {
+        console.log("error communicating with server", error);
+    }
 }
 
 document.getElementById("fight").addEventListener("click", () => {
     location.reload();
 });
 
-newGame();
+initialze();

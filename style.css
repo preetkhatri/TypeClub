@@ -6,6 +6,9 @@
     box-sizing: border-box;
 }
 
+* ::-webkit-scrollbar {
+    display: none;
+}
 :root {
     --bgColor: #000000;
     --textPrimary: #E5A91C;
@@ -18,6 +21,7 @@ body {
     color: var(--textPrimary);
     font-size: 1.1rem;
 }
+
 
 main {
     width: 800px;
@@ -32,6 +36,7 @@ img {
 #head {
     display: flex;
     flex-direction: row;
+    margin-top: -30px;
     margin-bottom: 30px;
 }
 
@@ -146,66 +151,6 @@ button {
     display: none;
 }
 
-/* .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-} */
-
-/* .modal {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-}
-
-.modal h2 {
-    margin-top: 0;
-    font-size: 1.5rem;
-    color: #333;
-}
-
-.modal p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-}
-
-.modal select {
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.modal button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.modal button:hover {
-    background-color: #218838;
-} */
-
 .spinner {
     border: 8px solid #f3f3f3;
     border-top: 8px solid var(--textPrimary);
@@ -227,4 +172,31 @@ button {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.leaderboard {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border: 2px solid var(--textPrimary);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+.leaderboard h2 {
+    color: var(--textPrimary);
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.leaderboard li {
+    list-style: none;
+    padding: 4px;
+}
+
+.hidden {
+    display: none;
 }
